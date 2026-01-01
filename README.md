@@ -1,41 +1,39 @@
-Visual Anomaly Detection on MVTec AD (Bottle)
+# Visual Anomaly Detection on MVTec AD (Bottle)
 
-An unsupervised visual anomaly detection pipeline implemented using a
-Convolutional Autoencoder and evaluated on the
-MVTec Anomaly Detection (AD) dataset.
+An **unsupervised visual anomaly detection pipeline** implemented using a **Convolutional Autoencoder** and evaluated on the **MVTec Anomaly Detection (AD)** dataset.
 
-The model is trained exclusively on defect-free samples and detects anomalies
-by measuring reconstruction error, which is visualized as
-pixel-level heatmaps highlighting defective regions.
+The model is trained **exclusively on defect-free samples** and detects anomalies by measuring **reconstruction error**, which is visualized as **pixel-level heatmaps** highlighting defective regions.
 
-📌 Overview
+---
 
-In real-world industrial inspection scenarios, defective samples are rare and
-highly diverse, making supervised learning approaches impractical.
+## 📌 Overview
 
-This project follows a one-class (unsupervised) learning paradigm:
+In real-world industrial inspection scenarios, defective samples are rare and highly diverse, making supervised learning approaches impractical. 
 
-Learn the distribution of normal samples
-
-Identify deviations from normality as anomalies
-
-Localize defects at the pixel level
+This project follows a **one-class (unsupervised) learning paradigm**:
+* **Learn** the distribution of normal samples.
+* **Identify** deviations from normality as anomalies.
+* **Localize** defects at the pixel level.
 
 The entire pipeline is modular, reproducible, and GPU-compatible.
 
-✨ Key Features
 
-Unsupervised Learning: No defect labels required during training
 
-Deep Learning: CNN-based autoencoder implemented in PyTorch
+---
 
-Localization: Pixel-level anomaly localization via reconstruction error
+## ✨ Key Features
 
-Benchmarking: Evaluation on the industry-standard MVTec AD dataset
+* **Unsupervised Learning:** No defect labels required during training.
+* **Deep Learning:** CNN-based autoencoder implemented in PyTorch.
+* **Localization:** Pixel-level anomaly localization via reconstruction error.
+* **Benchmarking:** Evaluation on the industry-standard MVTec AD dataset.
+* **Performance:** Full GPU support (CUDA) for fast training and inference.
 
-Performance: Full GPU support (CUDA) for fast training and inference
+---
 
-📂 Project Structure
+## 📂 Project Structure
+
+```text
 src/
  ├── datasets/
  │    └── mvtec_bottle.py      # Dataset loader for MVTec bottle category
@@ -50,15 +48,17 @@ scripts/
 data/                          # Dataset directory (git-ignored)
 runs/                          # Model outputs and visualizations (git-ignored)
 
-📊 Dataset
+```
+## 📊 Dataset
 
-This project uses the MVTec Anomaly Detection (AD) dataset, a widely adopted
-benchmark for industrial visual anomaly detection.
+This project uses the **MVTec Anomaly Detection (AD)** dataset, a widely adopted benchmark for
+industrial visual anomaly detection.
 
-Due to dataset size and licensing restrictions, the dataset is
-not included in this repository.
+Due to **dataset size and licensing restrictions**, the dataset is **not included** in this repository.
 
-Expected Directory Structure
+### Expected Directory Structure
+
+```text
 data/mvtec/bottle/
  ├── train/
  │    └── good/                # Normal samples used for training
@@ -69,99 +69,78 @@ data/mvtec/bottle/
  │    └── contamination/       # Defective samples
  └── ground_truth/             # Pixel-level defect masks
 
+ Note: Ground-truth masks are used only for evaluation and visualization. They are never used during training.
 
-Note: Ground-truth masks are used only for evaluation and visualization
-and are never used during training.
+## 🚀 Setup & Installation
 
-🚀 Setup & Installation
+This section describes how to set up the environment required to run the project locally.
 
-This section describes how to set up the environment required to run the project
-locally.
+---
 
-Virtual Environment
+### Virtual Environment
 
-1. Create a Python virtual environment
+1.Create a Python virtual environment:
 
-python -m venv .venv
+    python -m venv .venv
 
+2. Activate the Environment
 
-2. Activate the environment
+    Windows (PowerShell): .\.venv\Scripts\Activate.ps1
 
-Windows (PowerShell)
+    Windows (CMD): .\.venv\Scripts\activate.bat
 
-.\.venv\Scripts\Activate.ps1
-
-
-Windows (CMD)
-
-.\.venv\Scripts\activate.bat
+    Linux/macOS: source .venv/bin/activate
 
 
-Linux / macOS
+3. Install Dependencies
 
-source .venv/bin/activate
+    pip install -r requirements.txt
 
-
-3. Install dependencies
-
-pip install -r requirements.txt
-
-
-4. GPU support (optional)
+4. GPU Support (Optional)
 
 Verify if your NVIDIA GPU is available for PyTorch:
-
-python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
+    python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
 
 🛠 Usage
+
 Step 1: Sanity Check
 
 Ensure the dataset is correctly placed:
 
-python scripts/check_dataset.py
+    python scripts/check_dataset.py
 
 Step 2: Training
 
-Train the autoencoder on good samples only:
+Train the autoencoder on "good" samples only:
 
-python scripts/train_ae.py
+    python scripts/train_ae.py
 
-
-The trained model is saved to:
-
-runs/autoencoder_bottle.pth
+The trained model will be saved to runs/autoencoder_bottle.pth.
 
 Step 3: Inference & Visualization
 
 Generate anomaly heatmaps:
 
-python scripts/infer_ae.py
+    python scripts/infer_ae.py
 
+Output visualizations (original image + heatmap overlay) are saved in runs/infer/.
 
-Output visualizations (original image + heatmap overlay) are saved in:
-
-runs/infer/
 
 📝 Methodology Notes
 
-Training Strategy:
-Training is performed strictly on normal samples (train/good).
+    Training Strategy: Training is performed strictly on "normal" samples (train/good).
 
-Detection Mechanism:
-Anomalies are detected via pixel-wise reconstruction error.
-Since the model is trained only on good bottles, it fails to accurately
-reconstruct defective regions.
+    Detection Mechanism: Anomalies are detected via pixel-wise reconstruction error. The logic is that the model, having only seen "good" bottles, will fail to accurately reconstruct "defective" parts.
 
-Exclusions:
-Dataset files, model weights, and output artifacts are excluded from version
-control for repository cleanliness.
+    Exclusions: Dataset files, model weights, and output artifacts are excluded from version control for repository cleanliness.
+
 
 🚀 Future Work
 
-Implement image-level and pixel-level AUROC evaluation
+    [ ] Implement image-level and pixel-level AUROC evaluation.
 
-Add threshold-based anomaly decision mechanisms
+    [ ] Add threshold-based anomaly decision mechanisms.
 
-Integrate feature-embedding approaches (e.g., ResNet-based methods)
+    [ ] Integrate feature-embedding approaches (e.g., ResNet-based methods).
 
-Extend to other MVTec categories (e.g., capsule, metal_nut)
+    [ ] Extend to other MVTec categories (e.g., capsule, metal_nut).
