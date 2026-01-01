@@ -68,7 +68,7 @@ data/mvtec/bottle/
  │    ├── broken_small/        # Defective samples
  │    └── contamination/       # Defective samples
  └── ground_truth/             # Pixel-level defect masks
-
+```
  Note: Ground-truth masks are used only for evaluation and visualization. They are never used during training.
 
 ## 🚀 Setup & Installation
